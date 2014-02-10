@@ -1,22 +1,23 @@
 package it.scompo.scompohibernatedemo.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 
-import javax.persistence.Column;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
-
+import javax.persistence.ManyToMany;
 
 /**
  * Implements the book object.
- * Uses annotation for hybernate.
+ * Uses annotation for hibernate.
  * 
  * @author mscomparin
  * @version 1.0
  */
 @Entity
-@Table(name= "Book")
 public class Book implements Serializable{
 	
 	/**
@@ -28,20 +29,21 @@ public class Book implements Serializable{
 	 * Isbn of the book.
 	 */
 	@Id
-	@Column(name="isbn")
-	private String isbn;
+	@GeneratedValue
+	private Integer id;
 	
-	/**
-	 * Author of the book.
-	 */
-	@Column(name="author")
-	private String author;
+	private String isbn;
 	
 	/**
 	 * The title.
 	 */
-	@Column(name="title")
 	private String title;
+	
+	/**
+	 * A Collection of books.
+	 */
+	@ManyToMany(mappedBy="books")
+	private Collection<Author> authors;
 
 	public Book() {
 		super();
@@ -49,14 +51,26 @@ public class Book implements Serializable{
 	
 	/**
 	 * @param isbn
-	 * @param author
 	 * @param title
 	 */
-	public Book(String isbn, String author, String title) {
+	public Book(String isbn, String title) {
 		super();
 		this.isbn = isbn;
-		this.author = author;
 		this.title = title;
+	}
+
+	/**
+	 * @return the authors
+	 */
+	public Collection<Author> getAuthors() {
+		return authors;
+	}
+
+	/**
+	 * @param authors the authors to set
+	 */
+	public void setAuthors(Collection<Author> authors) {
+		this.authors = authors;
 	}
 
 	/**
@@ -71,20 +85,6 @@ public class Book implements Serializable{
 	 */
 	public void setIsbn(String isbn) {
 		this.isbn = isbn;
-	}
-
-	/**
-	 * @return the author
-	 */
-	public String getAuthor() {
-		return author;
-	}
-
-	/**
-	 * @param author the author to set
-	 */
-	public void setAuthor(String author) {
-		this.author = author;
 	}
 
 	/**
@@ -108,7 +108,6 @@ public class Book implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((author == null) ? 0 : author.hashCode());
 		result = prime * result + ((isbn == null) ? 0 : isbn.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
@@ -126,11 +125,6 @@ public class Book implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Book other = (Book) obj;
-		if (author == null) {
-			if (other.author != null)
-				return false;
-		} else if (!author.equals(other.author))
-			return false;
 		if (isbn == null) {
 			if (other.isbn != null)
 				return false;
@@ -150,8 +144,7 @@ public class Book implements Serializable{
 	 */
 	@Override
 	public String toString() {
-		return String.format("Book [isbn=%s, author=%s, title=%s]", 
-				isbn, author, title);
+		return String.format("Book [isbn=%s, title=%s]", isbn, title);
 	}
 	
 	

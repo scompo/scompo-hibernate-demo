@@ -34,34 +34,34 @@ public class BookController {
 	@RequestMapping(value="/book", 
 					method= RequestMethod.GET,
 					produces = "application/json")
-	public @ResponseBody Book getBook(@RequestParam String isbn){
+	public @ResponseBody Book getBook(@RequestParam Integer id){
 		logger.debug("/book called with GET");
-		logger.debug("got = " + isbn.getClass().getName() + isbn);
-		return bookDto.findOne(isbn);
+		logger.debug("got = " + id.getClass().getName() + id);
+		return bookDto.findOne(id);
 	}
 	
 	@RequestMapping(value="/book", 
 			method= RequestMethod.POST,
 			produces="application/json",
 			consumes="application/json")
-	public @ResponseBody String writeBook(@RequestBody Book book) {
+	public @ResponseBody String saveBook(@RequestBody Book book) {
 		logger.debug("/book called with POST");
 		logger.debug("got = " + book.getClass().getName() + book);
 		bookDto.create(book);
 		logger.debug("book created");
-		return "ok?";
+		return "Created";
 	}
 	
 	@RequestMapping(value="/book", 
 			method= RequestMethod.PUT,
 			produces="application/json",
 			consumes="application/json")
-	public @ResponseBody String updateBook(@RequestBody Book book) {
+	public @ResponseBody Book updateBook(@RequestBody Book book) {
 		logger.debug("/book called with PUT");
 		logger.debug("got = " + book.getClass().getName() + book);
-		bookDto.update(book);
-		logger.debug("book updated");
-		return "ok?";
+		Book bookResult = bookDto.update(book);
+		logger.debug("book updated: "+bookResult);
+		return bookResult;
 	}
 
 	@RequestMapping(value="/book", 
@@ -72,7 +72,7 @@ public class BookController {
 		logger.debug("/book called with DELETE");
 		logger.debug("got = " + book.getClass().getName() + book);
 		bookDto.delete(book);
-		logger.debug("book Deleted");
+		logger.debug("book deleted");
 		return "ok?";
 	}
 	
@@ -84,7 +84,14 @@ public class BookController {
 		return bookDto.findAll();
 		
 	}
-	
-	
-	
+		
+	@RequestMapping(value="/booktest",
+			method= RequestMethod.GET,
+			produces="application/json")
+	public @ResponseBody Book getTestBook() {
+	logger.debug("/booktest called with GET");
+	Book res = new Book("123123123", "testing spring");
+	return res;
+
+}
 }

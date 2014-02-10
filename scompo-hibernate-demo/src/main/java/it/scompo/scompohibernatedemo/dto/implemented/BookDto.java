@@ -21,7 +21,6 @@ public class BookDto extends AbstractDto<Book> implements IBookDto{
 	
 	@Override
 	protected IOperations<Book> getDao() {
-		// TODO Auto-generated method stub
 		return dao;
 	}
 
